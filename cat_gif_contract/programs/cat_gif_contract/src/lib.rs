@@ -23,7 +23,7 @@ pub mod cat_gif_contract {
       gif_link: gif_link.to_string(),
       user_address: *user.to_account_info().key,
       reactor_count: 0,
-      //transaction_hash: ctx.accounts.system_program.to_account_info().key.to_string(),
+      transaction_hash: ctx.accounts.user.key().to_string(),
     };
 
     // Increment total_gifs.
@@ -48,19 +48,16 @@ pub mod cat_gif_contract {
 
   pub fn delete_gif(ctx: Context<DeleteGif>, gif_link: String, pub_key: String) -> Result <()> {
       let base_account = &mut ctx.accounts.base_account;
-
       // Find the index of the GIF with the given link.
       let gif_index = base_account
           .gif_list
           .iter()
           .position(|gif| gif.gif_link == gif_link)
           .ok_or(ErrorCode::GifNotFound)?;
-
       // Ensure that the public key matches the owner of the GIF (if needed).
       if base_account.gif_list[gif_index].user_address.to_string() != pub_key {
           return Err(ErrorCode::Unauthorized.into());
       }
-
       base_account.gif_list.remove(gif_index);
       base_account.total_gifs -= 1;
       Ok(())
@@ -107,6 +104,7 @@ pub struct ItemStruct {
     pub gif_link: String,
     pub user_address: Pubkey,
     pub reactor_count: u64,
+    pub transaction_hash: String,
 }
 
 // Tell Solana what we want to store on this account.

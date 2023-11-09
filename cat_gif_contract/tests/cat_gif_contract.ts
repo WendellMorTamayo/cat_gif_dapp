@@ -27,10 +27,10 @@ describe("CatGifContract", () => {
     let account = await program.account.baseAccount.fetch(
       baseAccount.publicKey
     );
-    console.log("👀 GIF Count", account.totalGifs.toString());
+    //console.log("👀 GIF Count", account.totalGifs.toString());
 
     // You'll need to now pass a GIF link to the function! You'll also need to pass in the user submitting the GIF!
-    await program.rpc.addGif("insert_a_giphy_link_here", {
+    let thash = await program.rpc.addGif("insert_a_giphy_link_here", {
       accounts: {
         baseAccount: baseAccount.publicKey,
         user: provider.publicKey,
@@ -41,9 +41,13 @@ describe("CatGifContract", () => {
     account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     console.log("👀 GIF Count", account.totalGifs.toString());
     // Access gif_list on the account!
-    console.log("👀 GIF List", account.gifList);
-    console.log("PublicKey: ", account.gifList[0].userAddress.toString());
-    console.log("Tx hash: ", baseAccount.publicKey.toBase58());
+    console.log("👀 1. THash: ", thash.toString());
+    console.log(
+      "2. TransactionHash: ",
+      account.gifList[0].transactionHash.toString()
+    );
+    console.log("3. UserAddress: ", account.gifList[0].userAddress.toString());
+    console.log("4. Base Account: ", baseAccount.publicKey.toBase58());
 
     let txt = await program.rpc.addReaction("0", {
       accounts: {
@@ -52,14 +56,14 @@ describe("CatGifContract", () => {
       },
     });
     account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    console.log("Tx hash: ", baseAccount.publicKey.toBase58());
+
     console.log(
       "GIF reactor Count",
       account.gifList[0].reactorCount.toString()
     );
   });
 
-  /*it("Should Delete!", async () => {
+  it("Should Delete!", async () => {
     // Add your test here.
     let account = await program.account.baseAccount.fetch(
       baseAccount.publicKey
@@ -77,5 +81,5 @@ describe("CatGifContract", () => {
       .rpc();
     account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     console.log("👀New GIF List", account.gifList);
-  });*/
+  });
 });

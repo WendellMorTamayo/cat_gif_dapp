@@ -8,6 +8,8 @@ import idl from "./cat_gif_contract.json";
 import Navbar from "./Components/NavBar";
 import Form from "./Components/Form";
 import GifList from "./Components/GifList";
+
+
 const solanaWeb3 = require('@solana/web3.js');
 
 window.Buffer = Buffer;
@@ -102,7 +104,8 @@ const App = () => {
         },
       })
       console.log("GIF successfully sent to program", inputValue);
-      console.log("Transaction Account: ", tx);
+      console.log("1. Transaction Account: ", tx);
+      console.log("2. Transaction Account: ", gifList[0].transactionHash.toString());
       await  getGiftList()
     } catch (error) {
       console.log("Error in sending gif: ", error);

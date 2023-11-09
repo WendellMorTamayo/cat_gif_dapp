@@ -131,6 +131,10 @@
           {
             "name": "reactorCount",
             "type": "u64"
+          },
+          {
+            "name": "transactionHash",
+            "type": "string"
           }
         ]
       }
